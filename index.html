@@ -205,7 +205,7 @@
         width: min(1100px, 100%);
         height: clamp(260px, 36vw, 470px);
         margin-top: 15px;
-        background-image: linear-gradient(to bottom, #f7f3e900 55%, #f7f3e9 100%), url("hero.png");
+        background-image: linear-gradient(to bottom, #f7f3e900 55%, #f7f3e9 100%), url("hero.webp");
         background-position: center;
         background-size: cover;
         mask-image:linear-gradient(to bottom, transparent 0%, black 18%, black 88%, transparent 100%)
@@ -536,84 +536,101 @@
         letter-spacing:.15em
     }
 
+    /* Portada a pantalla completa, con textos e idiomas editables */
     .intro {
         position: fixed;
         inset: 0;
-        background: #44513c;
         z-index: 100;
         display: grid;
         place-items: center;
-        transition: opacity .85s, visibility .85s;
-        padding:20px
-    }
-
-    .intro.closed {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events:none
-    }
-
-    .envelope {
-        position: relative;
-        width: min(540px, 90vw);
-        height: 350px;
-        background: #f7f2e7;
-        box-shadow: 0 22px 65px #121c1440;
-        display: grid;
-        place-items: center;
-        cursor: pointer;
         overflow: hidden;
-        transition:transform .5s
+        background: #f7f3e9;
+        transition: opacity .8s ease, visibility .8s ease;
     }
-
-    .envelope:hover {
-        transform:translateY(-7px)
-    }
-
-    .envelope:before {
+    .intro::before {
         content: "";
         position: absolute;
         inset: 0;
-        background: #e8e2d5;
-        clip-path:polygon(0 0, 50% 54%, 100% 0)
+        background: url("hero.webp") center / cover no-repeat;
+        opacity: .22;
+        filter: saturate(.55);
     }
-
-    .envelope:after {
-        content: "";
+    .intro.closed { opacity: 0; visibility: hidden; pointer-events: none; }
+    .envelope-wrap {
+        position: relative;
+        z-index: 1;
+        height: 100dvh;
+        width: min(100vw, calc(100dvh * 940 / 1312));
+        box-shadow: 0 15px 70px #27301e30;
+        flex-shrink: 0;
+    }
+    .envelope {
+        display: block;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border: 0;
+        background: url("sobre-limpio.webp") center / 100% 100% no-repeat;
+        cursor: pointer;
+        transition: transform .65s ease, opacity .65s ease;
+    }
+    .intro.opening .envelope-wrap { animation: invitation-open .8s ease forwards; }
+    @keyframes invitation-open { to { transform: translateY(-25px) scale(1.04); opacity: 0; } }
+    .envelope:focus-visible { outline: 3px solid #647359; outline-offset: -5px; }
+    .intro-languages {
         position: absolute;
-        inset: 0;
-        border: 1px solid #d4cbbb;
-        clip-path:polygon(0 100%, 50% 54%, 100% 100%)
+        z-index: 4;
+        top: 2.7%;
+        right: 5%;
+        display: flex;
+        gap: 3px;
     }
-
-    .wax {
-        z-index: 2;
-        width: 96px;
-        height: 96px;
-        border-radius: 50%;
-        background: radial-gradient(circle at 25% 20%, #74816c, #384c35 75%);
-        border: 6px double #9daa90;
-        box-shadow: 0 4px 12px #0004;
-        color: #e7e4d8;
-        display: grid;
-        place-items: center;
-        font: 35px 'Cormorant Garamond', serif
+    .intro-languages button {
+        border: 0;
+        border-radius: 30px;
+        background: transparent;
+        padding: 7px 11px;
+        color: #45513f;
+        font: clamp(13px, 1.5vw, 19px) 'Cormorant Garamond', serif;
     }
-
-    .intro-label {
+    .intro-languages button.active { background: #e4dfd3; }
+    .envelope-title {
         position: absolute;
-        bottom: 35px;
-        z-index: 3;
-        letter-spacing: .2em;
-        font-size: 10px;
-        color:#3d4d39
+        left: 19%;
+        width: 62%;
+        top: 58.5%;
+        text-align: center;
+        color: #4f5945;
+        font: clamp(27px, 5.3dvh, 65px) 'Italianno', cursive;
+        line-height: .93;
+        pointer-events: none;
+        white-space: pre-line;
+        transform: rotate(-3deg);
     }
-
-    .intro-title {
+    .envelope-title span { display: block; }
+    .envelope-instruction {
         position: absolute;
-        top: 10%;
-        font: 46px 'Italianno', cursive;
-        color:#f9f4e7
+        top: 77.5%;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        color: #4a5443;
+        font-size: clamp(7px, 1.2dvh, 13px);
+        letter-spacing: .22em;
+        pointer-events: none;
+    }
+    .envelope-arrow {
+        position: absolute;
+        top: 81%;
+        left: 50%;
+        font: clamp(24px, 4dvh, 45px) 'Cormorant Garamond', serif;
+        transform: translateX(-50%);
+        color: #59634e;
+        pointer-events: none;
+    }
+    @media (max-width: 780px) {
+        .intro::before { display: none; }
+        .envelope-title { font-size: clamp(27px, 5.2dvh, 53px); }
     }
 
     .reveal {
@@ -654,7 +671,7 @@
         }
 
         .hero {
-            padding-top: 80px;
+            padding-top: 42px;
             min-height:auto
         }
 
@@ -715,15 +732,48 @@
             transform: none
         }
     }
+    
+/* PORTADA EDITORIAL — proporciones de la referencia 1672 × 941 */
+.intro { background: #f5f0e6 url("fondo-limpio.webp") center center / cover no-repeat !important; }
+.intro::before { display:none !important; }
+.envelope-wrap {
+  position:relative; width:min(36.42vw, 78.8vh * 0.78);
+  height:min(82.9vh, 36.42vw / 0.78);
+  aspect-ratio:609/780; box-shadow:0 16px 32px #37372832;
+  border-radius:4px; overflow:visible;
+}
+.envelope { position:relative; background-image:url("sobre-limpio.webp") !important; border-radius:4px; }
+.intro-languages { position:fixed; top:3.3vh; right:3.6vw; gap:0; padding:0; background:#eee9de; border-radius:40px; }
+.intro-languages button { min-width:58px; padding:8px 15px; font-size:19px; cursor:pointer; }
+.intro-languages button.active { background:#45543e; color:#fff; }
+.envelope-title { top:58.6%; left:13%; width:74%; font-size:clamp(26px, 3.1vw, 51px); line-height:.90; }
+.envelope-instruction { top:77.5%; font-size:clamp(7px, .7vw, 12px); }
+.envelope-arrow { top:80.6%; font-size:clamp(23px, 2.5vw, 39px); }
+@media(max-width:780px) {
+ .intro { background-size:cover !important; }
+ .envelope-wrap { width:min(94vw, 72dvh * .78); height:auto; aspect-ratio:609/780; }
+ .intro-languages { top:2.5dvh; right:4vw; }
+ .intro-languages button { min-width:45px; font-size:17px; }
+ .envelope-title { font-size:clamp(25px, 6vw, 46px); }
+ .envelope-instruction { font-size:clamp(7px, 1.5vw, 11px); }
+}
+@media(prefers-reduced-motion:reduce) { .intro.opening .envelope-wrap { animation:none; } }
+
     </style>
 </head>
 <body>
     <div class="intro" id="intro">
-        <div class="intro-title" data-t="introTitle">Una invitación muy especial</div>
-        <button class="envelope" id="open" aria-label="Abrir invitación">
-            <span class="wax">A&J</span>
-            <span class="intro-label" data-t="open">DESLIZÁ PARA ABRIR · HACÉ CLIC</span>
-        </button>
+        <div class="envelope-wrap">
+            <button class="envelope" id="open" type="button" aria-label="Abrir invitación / Einladung öffnen">
+                <span class="envelope-title" data-t="introTitle">Una invitación<br>muy especial</span>
+                <span class="envelope-instruction" data-t="open">DESLIZÁ PARA ABRIR</span>
+                <span class="envelope-arrow" aria-hidden="true">↓</span>
+            </button>
+            <div class="intro-languages" aria-label="Idioma / Sprache">
+                <button type="button" data-lang="es" class="active">ES</button>
+                <button type="button" data-lang="de">DE</button>
+            </div>
+        </div>
     </div>
     <header>
         <a class="logo" href="#home">A&J</a>
@@ -932,8 +982,8 @@
     <script>
     const translations = {
         es: {
-            introTitle: 'Una invitación muy especial',
-            open: 'HACÉ CLIC PARA ABRIR',
+            introTitle: 'Una invitación\nmuy especial',
+            open: 'DESLIZÁ PARA ABRIR',
             navStory: 'Nuestra historia',
             navDetails: 'La celebración',
             navTimeline: 'Itinerario',
@@ -984,7 +1034,7 @@
             seconds: 'SEGUNDOS'
         },
         de: {
-            introTitle: 'Eine ganz besondere Einladung',
+            introTitle: 'Eine ganz besondere\nEinladung',
             open: 'ZUM ÖFFNEN KLICKEN',
             navStory: 'Unsere Geschichte',
             navDetails: 'Die Feier',
@@ -1059,11 +1109,15 @@
     setLang(lang);
     setInterval(countdown, 1000);
     document.getElementById('open').addEventListener('click', () => {
-        document.getElementById('intro').classList.add('closed');
+        document.getElementById('intro').classList.add('opening');
+        window.setTimeout(() => {
+            document.getElementById('intro').classList.add('closed');
+            document.getElementById('intro').classList.remove('opening');
+            window.scrollTo(0, 0);
+        }, 580);
         sessionStorage.setItem('opened', 'yes')
     });
-    if (sessionStorage.getItem('opened'))
-        document.getElementById('intro').classList.add('closed');
+    // La invitación aparece al cargar la página, también al volver a visitarla.
     document.getElementById('menu').addEventListener('click', () => document.getElementById('nav').classList.toggle('open'));
     document.querySelectorAll('nav a').forEach(a => a.addEventListener('click', () => document.getElementById('nav').classList.remove('open')));
     const observer = new IntersectionObserver(entries => entries.forEach(e => {
