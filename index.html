@@ -949,25 +949,25 @@
                 <div class="script" data-t="rsvpScript">Bitte bestätigt eure Teilnahme</div>
                 <p class="prose" data-t="rsvpText">Nos encantaría compartir este día con vos. Completá el formulario para probar la experiencia de confirmación.</p>
             </div>
-            <form class="form reveal" id="rsvpForm">
+            <form class="form reveal" id="rsvpForm" action="https://formspree.io/f/xljgvlvb" method="POST">
                 <div>
                     <label for="guest" data-t="name">Nombre y apellido</label>
-                    <input id="guest" required autocomplete="name">
+                    <input id="guest" name="nombre" required autocomplete="name">
                 </div>
                 <div>
                     <label for="email">Email</label>
-                    <input id="email" type="email" required autocomplete="email">
+                    <input id="email" name="email" type="email" required autocomplete="email">
                 </div>
                 <div>
                     <label for="attendance" data-t="attend">¿Vas a asistir?</label>
-                    <select id="attendance">
+                    <select id="attendance" name="asistencia">
                         <option value="yes" data-t="yes">¡Sí, ahí estaré!</option>
                         <option value="no" data-t="no">Lamentablemente no podré asistir</option>
                     </select>
                 </div>
                 <div>
                     <label for="notes" data-t="notes">Comentarios o restricciones alimentarias</label>
-                    <textarea id="notes" rows="3"></textarea>
+                    <textarea id="notes" name="comentarios" rows="3"></textarea>
                 </div>
                 <button class="button" type="submit" data-t="send">Probar confirmación →</button>
                 <p class="form-status" id="formStatus" role="status"></p>
@@ -1129,10 +1129,46 @@
         threshold: .1
     });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    document.getElementById('rsvpForm').addEventListener('submit', e => {
-        e.preventDefault();
-        document.getElementById('formStatus').textContent = translations[lang].demo
+    document.getElementById('rsvpForm').addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const form = e.currentTarget;
+  const status = document.getElementById('formStatus');
+  const button = form.querySelector('button[type="submit"]');
+
+  button.disabled = true;
+
+  status.textContent = lang === 'es'
+    ? 'Enviando confirmación...'
+    : 'Bestätigung wird gesendet...';
+
+  try {
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: {
+        'Accept': 'application/json'
+      }
     });
+
+    if (!response.ok) {
+      throw new Error('Error al enviar');
+    }
+
+    status.textContent = lang === 'es'
+      ? '¡Muchas gracias! Recibimos tu confirmación. ♡'
+      : 'Vielen Dank! Wir haben eure Rückmeldung erhalten. ♡';
+
+    form.reset();
+
+  } catch (error) {
+    status.textContent = lang === 'es'
+      ? 'No pudimos enviar tu confirmación. Intentá nuevamente.'
+      : 'Die Bestätigung konnte nicht gesendet werden. Bitte versucht es erneut.';
+  } finally {
+    button.disabled = false;
+  }
+});
     </script>
 </body>
 </html>
