@@ -525,16 +525,51 @@
         line-height:1.7
     }
 
-    .footer {
-        text-align: center;
-        padding: 50px 15px;
-        background:#f4f0e7
-    }
+    
+.footer {
+  text-align: center;
+  padding: 85px 20px 95px;
+  background: #f4f0e7;
+}
 
-    .footer p {
-        font-size: 10px;
-        letter-spacing:.15em
-    }
+.footer .logo {
+  display: inline-block;
+  margin-bottom: 38px;
+}
+
+.footer p {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.footer-names {
+  margin-bottom: 30px !important;
+}
+
+.footer-location {
+  font-size: 11px !important;
+}
+
+@media (max-width: 600px) {
+  .footer {
+    padding: 65px 20px 75px;
+  }
+
+  .footer .logo {
+    margin-bottom: 30px;
+  }
+
+  .footer p {
+    font-size: 10px;
+    line-height: 2;
+  }
+
+  .footer-names {
+    margin-bottom: 24px !important;
+  }
+}
 
     /* Portada a pantalla completa, con textos e idiomas editables */
     .intro {
@@ -975,10 +1010,16 @@
         </section>
     </main>
     <footer class="footer">
-        <a class="logo" href="#home">A&J</a>
-        <p>ANNE SOPHIE & JUAN MARTIN · 21.02.2027</p>
-        <p>AMERICANA EVENTOS · BARILOCHE</p>
-    </footer>
+  <a class="logo" href="#home">A&J</a>
+
+  <p class="footer-names">
+    ANNE SOPHIE & JUAN MARTIN · 21.02.2027
+  </p>
+
+  <p class="footer-location">
+    AMERICANA EVENTOS · BARILOCHE
+  </p>
+</footer>
     <script>
     const translations = {
         es: {
